@@ -47,6 +47,22 @@ export SPOOLMAN_DIR_BACKUPS
 export SPOOLMAN_DIR_LOGS
 export SPOOLMAN_DIR_CACHE
 
+# Detect HA ingress path and configure Spoolman base path
+if [ -n "$SUPERVISOR_TOKEN" ]; then
+    echo "[INFO] Querying Supervisor API for ingress URL..."
+    INGRESS_URL=$(curl -s \
+        -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+        http://supervisor/addons/self/info \
+        | python3 -c "import sys, json; d = json.load(sys.stdin); print(d.get('data', {}).get('ingress_url', ''))" 2>/dev/null || echo "")
+
+    if [ -n "$INGRESS_URL" ]; then
+        export SPOOLMAN_BASE_PATH="${INGRESS_URL%/}"
+        echo "[INFO] SPOOLMAN_BASE_PATH set to: ${SPOOLMAN_BASE_PATH}"
+    else
+        echo "[WARN] Could not determine ingress URL from Supervisor"
+    fi
+fi
+
 # Start Spoolman
 echo "[INFO] Launching Spoolman..."
 
