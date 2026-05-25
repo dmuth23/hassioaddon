@@ -1,7 +1,8 @@
-ARG BUILD_FROM
 FROM ghcr.io/donkie/spoolman:0.23.1
 
-# Expose port
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
 EXPOSE 7912
 
 COPY run.sh /run.sh
