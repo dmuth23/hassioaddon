@@ -26,14 +26,10 @@ options:
   SPOOLMAN_DEBUG_MODE: false
 schema:
   SPOOLMAN_DEBUG_MODE: bool
-homeassistant_api: true
-hassio_api: true
-auth_api: true
-privileged: []
+homeassistant_api: false
+hassio_api: false
 # Ingress (web UI in HA sidebar)
 ingress: true
-ingress_port: 0
+ingress_port: 7912
 panel_icon: phu:3d-filament
 panel_title: Spoolman
-# Use host network so the add-on can reach services on Tailscale, VPNs, etc.
-host_network: true
